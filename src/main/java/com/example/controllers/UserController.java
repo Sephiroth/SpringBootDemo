@@ -1,25 +1,25 @@
 package com.example.controllers;
 
-import com.example.dao.User;
-import com.sun.deploy.net.HttpRequest;
-import com.sun.deploy.net.HttpResponse;
+import com.example.Model.User;
+import com.example.Service.UserService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpServletResponseWrapper;
+import javax.annotation.Resource;
+import java.util.Date;
 
 @RestController
 @RequestMapping(value = "/api/users")
 public class UserController {
+    @Resource
+    UserService service;
 
-    @ApiOperation(value = "添加用户",httpMethod = "POST")
+    @ApiOperation(value = "添加用户",httpMethod = "POST") // 接口描述
     @RequestMapping(value = "/user", method = RequestMethod.POST,produces = "application/json")
-    public boolean AddUser(@RequestBody User user) {
-        return  false;
+    public int AddUser(@RequestBody User user) {
+        return service.addUser(user);
     }
 
     //@RequestMapping(value = "/{id}", method = RequestMethod.GET,produces = "application/json")
@@ -29,7 +29,7 @@ public class UserController {
     })
     //@ApiResponse()
     @GetMapping(value = "/{id}")
-    public User GetUser(@PathVariable int id) {
-        return User.builder().id(id).username("lutao").sex("男").email("123456").build();
+    public @ResponseBody User GetUser(@PathVariable int id) {
+        return User.builder().id(id).username("lutao").sex("男").email("123456").createDate(new Date()).build();
     }
 }
